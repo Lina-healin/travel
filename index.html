@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>고베-오사카 5박 6일 일정</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf9f5;
+    --surface:#ffffff;
+    --surface-alt:#f2f0e9;
+    --line:#e6e2d8;
+    --ink:#1d1c19;
+    --ink-muted:#6b6660;
+    --ink-faint:#a39d90;
+    --accent:#2c4a3a;
+    --accent-soft:#e8ede9;
+    --scale:1;
+  }
+  *{box-sizing:border-box;}
+  html{
+    background:var(--bg);
+    font-size:calc(16px * var(--scale));
+    scroll-behavior:smooth;
+  }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Noto Sans KR", -apple-system, sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{ color:var(--accent); text-decoration-color:rgba(44,74,58,0.35); text-underline-offset:2px; }
+  a:hover{ text-decoration-color:var(--accent); }
+
+  .topbar{
+    position:sticky; top:0; z-index:50;
+    background:rgba(250,249,245,0.92);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar-inner{
+    max-width:720px; margin:0 auto;
+    padding:0.7rem 1.1rem;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:0.75rem;
+  }
+  .brand{
+    font-family:"Noto Serif KR", serif;
+    font-size:0.95rem; font-weight:700;
+    letter-spacing:0.01em;
+    white-space:nowrap;
+    overflow:hidden; text-overflow:ellipsis;
+    color:var(--ink);
+  }
+  .font-ctrl{
+    display:flex; align-items:center; gap:0.35rem;
+    background:var(--surface-alt);
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:0.2rem;
+    flex-shrink:0;
+  }
+  .font-ctrl button{
+    all:unset;
+    cursor:pointer;
+    width:1.9rem; height:1.9rem;
+    display:flex; align-items:center; justify-content:center;
+    border-radius:999px;
+    font-size:0.78rem; font-weight:700;
+    color:var(--ink-muted);
+    transition:background .15s, color .15s;
+  }
+  .font-ctrl button:hover{ background:var(--surface); color:var(--ink); }
+  .font-ctrl button:active{ background:var(--accent); color:#fff; }
+  .font-ctrl .reset{ font-size:0.65rem; padding:0 0.5rem; width:auto; letter-spacing:0.02em;}
+
+  .daynav{
+    max-width:720px; margin:0 auto;
+    display:flex; gap:0.4rem;
+    padding:0.55rem 1.1rem 0.7rem;
+    overflow-x:auto;
+    scrollbar-width:none;
+  }
+  .daynav::-webkit-scrollbar{display:none;}
+  .daynav button{
+    all:unset;
+    flex:0 0 auto;
+    font-family:"JetBrains Mono",monospace;
+    font-size:0.7rem; font-weight:700;
+    color:var(--ink-muted);
+    background:var(--surface);
+    border:1px solid var(--line);
+    padding:0.4rem 0.7rem;
+    border-radius:999px;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .daynav button:hover{ border-color:var(--accent); color:var(--accent); }
+
+  .wrap{ max-width:720px; margin:0 auto; padding:1.5rem 1.1rem 4rem; }
+
+  .hero{
+    padding:1.6rem 0 1.2rem;
+    border-bottom:1px solid var(--line);
+    margin-bottom:1.8rem;
+  }
+  .hero .eyebrow{
+    font-family:"JetBrains Mono",monospace;
+    font-size:0.72rem; letter-spacing:0.14em;
+    color:var(--accent); text-transform:uppercase;
+    margin:0 0 0.6rem;
+  }
+  .hero h1{
+    font-family:"Noto Serif KR", serif;
+    font-weight:900;
+    font-size:1.85rem;
+    line-height:1.35;
+    margin:0 0 0.5rem;
+    color:var(--ink);
+  }
+  .hero .sub{
+    color:var(--ink-muted);
+    font-size:0.92rem;
+    margin:0 0 1.1rem;
+  }
+  .route-strip{
+    display:flex; flex-wrap:wrap; align-items:center;
+    gap:0.35rem;
+    font-family:"JetBrains Mono",monospace;
+    font-size:0.72rem;
+    color:var(--ink-muted);
+  }
+  .route-strip .chip{
+    background:var(--surface-alt);
+    border:1px solid var(--line);
+    padding:0.3rem 0.6rem;
+    border-radius:6px;
+    color:var(--ink);
+  }
+  .route-strip .arrow{ color:var(--ink-faint); }
+
+  .hint{
+    margin-top:1rem;
+    font-size:0.78rem;
+    color:var(--ink-faint);
+  }
+
+  .day{
+    margin-bottom:1rem;
+    scroll-margin-top:6.5rem;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    overflow:hidden;
+  }
+  .day summary{
+    list-style:none;
+    cursor:pointer;
+    padding:1rem 1.2rem;
+    display:flex; align-items:center; gap:0.7rem; flex-wrap:wrap;
+    position:relative;
+  }
+  .day summary::-webkit-details-marker{ display:none; }
+  .day summary::after{
+    content:"";
+    position:absolute; right:1.2rem; top:50%;
+    width:0.55rem; height:0.55rem;
+    border-right:2px solid var(--ink-faint);
+    border-bottom:2px solid var(--ink-faint);
+    transform:translateY(-70%) rotate(45deg);
+    transition:transform .2s;
+  }
+  .day[open] summary::after{ transform:translateY(-30%) rotate(-135deg); }
+
+  .day-badge{
+    font-family:"JetBrains Mono",monospace;
+    font-size:0.68rem; font-weight:700;
+    color:#fff;
+    background:var(--accent);
+    padding:0.22rem 0.5rem;
+    border-radius:5px;
+    letter-spacing:0.03em;
+  }
+  .day-tag{
+    font-family:"JetBrains Mono",monospace;
+    font-size:0.65rem; font-weight:700;
+    color:var(--ink-muted);
+    background:var(--surface-alt);
+    border:1px solid var(--line);
+    padding:0.18rem 0.45rem;
+    border-radius:999px;
+  }
+  .day summary h2{
+    font-family:"Noto Serif KR", serif;
+    font-size:1.15rem; font-weight:700;
+    margin:0;
+    color:var(--ink);
+    flex:1 1 auto;
+    min-width:0;
+  }
+  .day-route{
+    width:100%;
+    color:var(--ink-muted);
+    font-size:0.85rem;
+    margin:0;
+    padding-left:0;
+  }
+  .day-body{
+    padding:0.2rem 1.2rem 1.3rem;
+    border-top:1px solid var(--line);
+  }
+
+  .timeline{
+    list-style:none; margin:1rem 0 0; padding:0 0 0 1.7rem;
+    position:relative;
+  }
+  .timeline::before{
+    content:"";
+    position:absolute; left:0.34rem; top:0.35rem; bottom:0.35rem;
+    width:2px;
+    background:var(--line);
+    border-radius:2px;
+  }
+
+  .event{ position:relative; padding-bottom:1.15rem; }
+  .event:last-child{ padding-bottom:0; }
+  .event::before{
+    content:"";
+    position:absolute; left:-1.7rem; top:0.28rem;
+    width:0.6rem; height:0.6rem;
+    border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 0 3px var(--surface);
+  }
+
+  .time{
+    font-family:"JetBrains Mono",monospace;
+    font-size:0.76rem; font-weight:700;
+    color:var(--accent);
+    display:block;
+    margin-bottom:0.2rem;
+  }
+
+  .event-title{
+    margin:0 0 0.15rem;
+    font-size:0.98rem; font-weight:500;
+    color:var(--ink);
+  }
+  .event-detail{
+    margin:0.15rem 0 0;
+    font-size:0.85rem;
+    color:var(--ink-muted);
+  }
+
+  .spots{
+    list-style:none; margin:0.55rem 0 0; padding:0;
+    display:grid; gap:0.5rem;
+  }
+  .spots li{
+    background:var(--surface-alt);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:0.6rem 0.75rem;
+    font-size:0.83rem;
+    color:var(--ink-muted);
+  }
+  .spots li strong{
+    color:var(--ink);
+    font-weight:700;
+  }
+  .spots li strong a{ color:var(--ink); }
+  .spots li .hours{
+    font-family:"JetBrains Mono",monospace;
+    font-size:0.73rem;
+    color:var(--accent);
+    margin-left:0.35rem;
+  }
+  .spots li .desc{ display:block; margin-top:0.2rem; }
+  .spots li .note{
+    display:block;
+    margin-top:0.2rem;
+    font-size:0.74rem;
+    color:var(--ink-faint);
+  }
+
+  .spots-toggle{ margin-top:0.7rem; }
+  .spots-toggle .spots{ margin-top:0.65rem; }
+  .spots-summary{
+    cursor:pointer;
+    list-style:none;
+    display:inline-flex; align-items:center; gap:0.4rem;
+    font-family:"JetBrains Mono",monospace;
+    font-size:0.76rem; font-weight:700;
+    color:var(--accent);
+    background:var(--accent-soft);
+    border:1px solid var(--line);
+    padding:0.4rem 0.75rem;
+    border-radius:999px;
+  }
+  .spots-summary::-webkit-details-marker{ display:none; }
+  .spots-summary::after{
+    content:"";
+    width:0.4rem; height:0.4rem;
+    border-right:2px solid var(--accent);
+    border-bottom:2px solid var(--accent);
+    transform:rotate(45deg);
+    transition:transform .2s;
+  }
+  .spots-toggle[open] .spots-summary::after{ transform:rotate(-135deg); }
+  .spots-count{ color:var(--ink-muted); font-weight:500; }
+
+  .hotel{
+    display:inline-block;
+    margin-top:0.3rem;
+    font-weight:700;
+    color:var(--ink);
+    background:var(--surface-alt);
+    border:1px solid var(--line);
+    padding:0.15rem 0.55rem;
+    border-radius:6px;
+    font-size:0.83rem;
+  }
+  .hotel a{ color:var(--ink); }
+
+  footer{
+    max-width:720px; margin:0 auto;
+    padding:1.5rem 1.1rem 3rem;
+    color:var(--ink-faint);
+    font-size:0.78rem;
+    border-top:1px solid var(--line);
+    text-align:center;
+  }
+
+  @media (min-width:640px){
+    .hero h1{ font-size:2.2rem; }
+    .wrap{ padding-top:2rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">고베-오사카 5박 6일 일정</div>
+    <div class="font-ctrl" role="group" aria-label="글자 크기 조절">
+      <button id="fontDown" aria-label="글자 작게">가−</button>
+      <button id="fontReset" class="reset mono" aria-label="기본 크기">100%</button>
+      <button id="fontUp" aria-label="글자 크게">가+</button>
+    </div>
+  </div>
+  <nav class="daynav mono" aria-label="날짜 바로가기">
+    <button data-target="day1">10/8 목</button>
+    <button data-target="day2">10/9 금</button>
+    <button data-target="day3">10/10 토</button>
+    <button data-target="day4">10/11 일</button>
+    <button data-target="day5">10/12 월</button>
+    <button data-target="day6">10/13 화</button>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <section class="hero">
+    <p class="eyebrow mono">FAMILY TRIP · KANSAI, JAPAN</p>
+    <h1>고베-오사카 5박 6일 일정</h1>
+    <p class="sub">2026. 10. 8(목) – 10. 13(화) · 5박 6일 · 김포 ⇄ 간사이</p>
+    <div class="route-strip">
+      <span class="chip">김포</span><span class="arrow">→</span>
+      <span class="chip">간사이/이즈미사노</span><span class="arrow">→</span>
+      <span class="chip">고베·기타노이진칸</span><span class="arrow">→</span>
+      <span class="chip">아리마온천</span><span class="arrow">→</span>
+      <span class="chip">오사카</span><span class="arrow">→</span>
+      <span class="chip">이즈미사노/린쿠</span><span class="arrow">→</span>
+      <span class="chip">김포</span>
+    </div>
+    <p class="hint">날짜를 탭하면 해당 일자로 이동해요. 각 날짜 제목을 눌러 펼치고 접을 수 있어요. 호텔·관광지 이름을 누르면 한국어로 된 소개 페이지로 연결돼요.</p>
+  </section>
+
+  <details class="day" id="day1" open>
+    <summary>
+      <span class="day-badge">DAY 1</span>
+      <h2>10월 8일 (목)</h2>
+      <span class="day-tag">평일</span>
+      <p class="day-route">김포 → 간사이 / 이즈미사노</p>
+    </summary>
+    <div class="day-body">
+      <ul class="timeline">
+        <li class="event">
+          <span class="time">18:50</span>
+          <p class="event-title">✈️ 김포공항 비행기 출발</p>
+        </li>
+        <li class="event">
+          <span class="time">20:35</span>
+          <p class="event-title">🛬 간사이공항 도착</p>
+        </li>
+        <li class="event">
+          <span class="time">21:30</span>
+          <p class="event-title">🚕 이즈미사노 이동</p>
+        </li>
+        <li class="event">
+          <span class="time">22:00</span>
+          <p class="event-title">🏨 체크인</p>
+          <span class="hotel"><a href="https://www.s-gth.jp/ko/" target="_blank" rel="noopener">Star Gate Hotel</a></span>
+        </li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="day" id="day2" open>
+    <summary>
+      <span class="day-badge">DAY 2</span>
+      <h2>10월 9일 (금)</h2>
+      <span class="day-tag">평일</span>
+      <p class="day-route">이즈미사노 → 기타노이진칸 → 아리마온천</p>
+    </summary>
+    <div class="day-body">
+      <ul class="timeline">
+        <li class="event">
+          <span class="time">09:00</span>
+          <p class="event-title">🏨 Star Gate Hotel 체크아웃 · 공항 이동</p>
+        </li>
+        <li class="event">
+          <span class="time">09:40 – 10:45</span>
+          <p class="event-title">🚌 간사이공항 T1 → 고베 산노미야</p>
+          <p class="event-detail">공항 리무진버스 · 약 65분 · 2,200엔</p>
+        </li>
+        <li class="event">
+          <span class="time">11:10 – 15:30</span>
+          <p class="event-title">🚶 기타노이진칸 관광 및 점심</p>
+          <details class="spots-toggle">
+
+            <summary class="spots-summary">추천 관광지 <span class="spots-count">(6곳)</span></summary>
+
+            <ul class="spots">
+            <li><strong><a href="https://kobebrighten.com/ko/articles/kitano-ijinkan-area-guide/" target="_blank" rel="noopener">기타노자카</a></strong><span class="hours">상시 개방</span><span class="desc">산노미야에서 이진칸 거리로 이어지는 언덕길</span></li>
+            <li><strong><a href="https://luwalker.kr/insta_spot/starbucks-coffee-kobe-kitano-ijinkan/" target="_blank" rel="noopener">스타벅스 고베 기타노이진칸점</a></strong><span class="hours">(08:00~22:00)</span><span class="desc">서양식 고택을 활용한 카페 · 연중무휴</span></li>
+            <li><strong><a href="https://kobebrighten.com/ko/articles/kitano-ijinkan-area-guide/" target="_blank" rel="noopener">모에기노야카타</a></strong><span class="hours">(09:30~18:00)</span><span class="desc">연두색 외관과 고베 시내 전망</span></li>
+            <li><strong><a href="https://www.earthtory.com/ko/city/kobe_49/attraction/kazami-dori-no-yakata_2383" target="_blank" rel="noopener">카자미도리노야카타</a></strong><span class="hours">(09:00~17:00)</span><span class="desc">붉은 벽돌과 지붕 위 풍향계가 대표적인 랜드마크</span><span class="note">정기휴관일은 매월 셋째 주 화요일 — 방문일인 10/9(금)은 정상 영업</span></li>
+            <li><strong><a href="https://locally.matcha-jp.com/ko/27368" target="_blank" rel="noopener">기타노텐만신사</a></strong><span class="hours">(09:00~17:00)</span><span class="desc">이진칸 거리와 고베 시내가 내려다보이는 전망 지점</span></li>
+            <li><strong><a href="https://ikidane-nippon.com/ko/spots/uroko-house-and-uroko-art-museum" target="_blank" rel="noopener">우로코노이에</a></strong><span class="hours">(10:00~17:00)</span><span class="desc">비늘 모양의 석판 외벽과 항구 전망 갤러리</span><span class="note">평일은 17:00 마감, 토·일·공휴일은 18:00까지 — 방문일인 10/9(금)은 17:00 마감 기준</span></li>
+          </ul>
+
+          </details>
+        </li>
+        <li class="event">
+          <span class="time">15:30 – 16:00</span>
+          <p class="event-title">🚶 산노미야 버스터미널 이동</p>
+        </li>
+        <li class="event">
+          <span class="time">16:00 – 16:30</span>
+          <p class="event-title">🚌 산노미야 → 아리마온천 직행버스</p>
+        </li>
+        <li class="event">
+          <span class="time">16:30</span>
+          <p class="event-title">📍 아리마온천 도착 · 료칸 픽업 요청</p>
+        </li>
+        <li class="event">
+          <span class="time">17:00경</span>
+          <p class="event-title">🏨 체크인</p>
+          <span class="hotel"><a href="https://negiyaryokan.com/ko-kr" target="_blank" rel="noopener">Negiya Ryofukaku</a></span>
+        </li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="day" id="day3" open>
+    <summary>
+      <span class="day-badge">DAY 3</span>
+      <h2>10월 10일 (토)</h2>
+      <span class="day-tag">주말</span>
+      <p class="day-route">아리마온천 → 오사카</p>
+    </summary>
+    <div class="day-body">
+      <ul class="timeline">
+        <li class="event">
+          <span class="time">11:00</span>
+          <p class="event-title">🏨 Negiya Ryofukaku 체크아웃</p>
+        </li>
+        <li class="event">
+          <span class="time">11:00 – 14:00</span>
+          <p class="event-title">🚶 아리마온천 마을 관광 및 점심</p>
+          <details class="spots-toggle">
+
+            <summary class="spots-summary">추천 관광지 <span class="spots-count">(6곳)</span></summary>
+
+            <ul class="spots">
+            <li><strong><a href="https://arimaspa-kingin.jp/ko-01.htm" target="_blank" rel="noopener">킨노유</a></strong><span class="hours">(08:00~22:00, 최종입장 21:30)</span><span class="desc">철분과 염분을 함유한 붉은빛 온천</span><span class="note">정기휴무 둘째·넷째 화요일 — 방문일인 10/10(토)은 정상 영업</span></li>
+            <li><strong><a href="https://arimaspa-kingin.jp/ko-01.htm" target="_blank" rel="noopener">긴노유</a></strong><span class="hours">(09:00~21:00, 최종입장 20:30)</span><span class="desc">투명한 탄산·라듐계 온천</span><span class="note">정기휴무 첫째·셋째 화요일 — 방문일인 10/10(토)은 정상 영업</span></li>
+            <li><strong><a href="https://arimaspa-kingin.jp/ko-01.htm" target="_blank" rel="noopener">타이코노아시유</a></strong><span class="hours">(08:00~22:00)</span><span class="desc">킨노유 앞 무료 족욕</span></li>
+            <li><strong><a href="https://matcha-jp.com/ko/4072" target="_blank" rel="noopener">유모토자카</a></strong><span class="hours">상시 개방</span><span class="desc">전통 상점과 간식점이 모인 중심 골목</span></li>
+            <li><strong><a href="https://japanbusonline.com/bus-repo/ko/%EB%B6%84%EB%A5%98%EB%90%98%EC%A7%80-%EC%95%8A%EC%9D%8C/6251/" target="_blank" rel="noopener">네네바시 · 네네상</a></strong><span class="hours">상시 개방</span><span class="desc">아리마온천 대표 사진 촬영 지점</span></li>
+            <li><strong><a href="https://www.arima-onsen.com/pickup/51/527/" target="_blank" rel="noopener">온천사</a></strong><span class="hours">(09:00~16:30)</span><span class="desc">아리마온천의 역사와 연결된 사찰</span></li>
+          </ul>
+
+          </details>
+        </li>
+        <li class="event">
+          <span class="time">14:10 – 15:10</span>
+          <p class="event-title">🚌 아리마온천 → 오사카 우메다 한큐삼번가</p>
+          <p class="event-detail">직행 고속버스 · 약 55분 · 1,400엔</p>
+        </li>
+        <li class="event">
+          <span class="time">15:20경</span>
+          <p class="event-title">🏨 체크인</p>
+          <span class="hotel"><a href="https://www.gardenhotels.co.jp/osaka-premier/ko/" target="_blank" rel="noopener">Mitsui Garden Hotel Osaka</a></span>
+        </li>
+        <li class="event">
+          <span class="time">16:30 이후</span>
+          <p class="event-title">🚶 신사이바시 · 도톤보리 관광 및 저녁</p>
+          <details class="spots-toggle">
+
+            <summary class="spots-summary">추천 관광지 <span class="spots-count">(4곳)</span></summary>
+
+            <ul class="spots">
+            <li><strong><a href="https://www.japan.travel/ko/destinations/kansai/osaka/dotonbori-and-shinsaibashi/" target="_blank" rel="noopener">신사이바시스지</a></strong><span class="hours">(상점마다 다름, 대략 10:00~20:00)</span><span class="desc">패션·잡화 매장이 이어지는 쇼핑 아케이드</span></li>
+            <li><strong><a href="https://www.japan.travel/ko/spot/2207/" target="_blank" rel="noopener">도톤보리</a></strong><span class="hours">거리는 24시간 개방</span><span class="desc">글리코상과 네온사인으로 대표되는 오사카 중심 번화가</span></li>
+            <li><strong><a href="https://www.gltjp.com/ko/directory/item/11897/" target="_blank" rel="noopener">호젠지요코초</a></strong><span class="hours">상시 개방</span><span class="desc">돌길과 작은 음식점이 모인 골목 · 음식점은 주로 저녁~심야 영업</span></li>
+            <li><strong><a href="https://www.japan.travel/ko/spot/1109/" target="_blank" rel="noopener">호젠지</a></strong><span class="hours">참배 24시간 가능</span><span class="desc">물이끼로 뒤덮인 미즈카케후도상이 유명한 사찰</span></li>
+          </ul>
+
+          </details>
+        </li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="day" id="day4" open>
+    <summary>
+      <span class="day-badge">DAY 4</span>
+      <h2>10월 11일 (일)</h2>
+      <span class="day-tag">주말</span>
+      <p class="day-route">오사카 — 혜린 콘서트 (6PM)</p>
+    </summary>
+    <div class="day-body">
+      <ul class="timeline">
+        <li class="event">
+          <span class="time">종일</span>
+          <p class="event-title">🚶 도톤보리</p>
+        </li>
+        <li class="event">
+          <span class="time">18:00</span>
+          <p class="event-title">🎫 혜린 콘서트</p>
+        </li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="day" id="day5" open>
+    <summary>
+      <span class="day-badge">DAY 5</span>
+      <h2>10월 12일 (월)</h2>
+      <span class="day-tag">평일</span>
+      <p class="day-route">오사카 — 혜린 콘서트 (4PM) → 이즈미사노</p>
+    </summary>
+    <div class="day-body">
+      <ul class="timeline">
+        <li class="event">
+          <span class="time">11:00</span>
+          <p class="event-title">🏨 Mitsui Garden Hotel Osaka 체크아웃</p>
+        </li>
+        <li class="event">
+          <span class="time">11:00 – 11:30</span>
+          <p class="event-title">🚐 호텔 셔틀로 우메다 이동</p>
+          <p class="event-detail">한큐 투어리스트 센터에 캐리어 보관 (~17:00)</p>
+        </li>
+        <li class="event">
+          <span class="time">11:30 – 11:50</span>
+          <p class="event-title">🚶 우메다 → 오사카텐만구 이동</p>
+        </li>
+        <li class="event">
+          <span class="time">11:50 – 12:30</span>
+          <p class="event-title">⛩️ 오사카텐만구</p>
+          <details class="spots-toggle">
+
+            <summary class="spots-summary">추천 관광지 <span class="spots-count">(1곳)</span></summary>
+
+            <ul class="spots">
+            <li><strong><a href="https://ikidane-nippon.com/ko/spots/osaka-tenmangu" target="_blank" rel="noopener">오사카텐만구</a></strong><span class="hours">(06:00~18:00)</span><span class="desc">학문의 신 스가와라노 미치자네를 모신 오사카 대표 도심 신사</span><span class="note">규모가 크지 않아 가볍게 둘러보기 좋은 현지 참배 명소</span></li>
+          </ul>
+
+          </details>
+        </li>
+        <li class="event">
+          <span class="time">12:30 – 14:30</span>
+          <p class="event-title">🚶 텐진바시스지 상점가 관광 및 점심</p>
+          <details class="spots-toggle">
+
+            <summary class="spots-summary">추천 관광지 <span class="spots-count">(1곳)</span></summary>
+
+            <ul class="spots">
+            <li><strong><a href="https://ko.wikipedia.org/wiki/%EB%8D%B4%EC%A7%84%EB%B0%94%EC%8B%9C%EC%8A%A4%EC%A7%80_%EC%83%81%EC%A0%90%EA%B0%80" target="_blank" rel="noopener">텐진바시스지</a></strong><span class="hours">(상점마다 다름, 대략 10:00~19:00)</span><span class="desc">약 2.6km 길이의 전통 상점가</span><span class="note">일본 음식점·화과자·반찬·생활용품·의류점 등이 밀집 — 관광형 쇼핑몰보다 오사카 현지 생활 분위기가 강한 곳</span></li>
+          </ul>
+
+          </details>
+        </li>
+        <li class="event">
+          <span class="time">14:30 – 15:00</span>
+          <p class="event-title">🚶 우메다 이동 / 혜린 공연장 이동</p>
+        </li>
+        <li class="event">
+          <span class="time">15:00 – 18:30</span>
+          <p class="event-title">🛍️ 우메다 자유 일정</p>
+          <p class="event-detail">쇼핑 / 우메키타 온천 렌 / 퀸즈웨이 발마사지 등</p>
+        </li>
+        <li class="event">
+          <span class="time">17:00</span>
+          <p class="event-title">🧳 캐리어 찾기</p>
+        </li>
+        <li class="event">
+          <span class="time">18:30</span>
+          <p class="event-title">🤝 혜린 합류</p>
+        </li>
+        <li class="event">
+          <span class="time">19:00</span>
+          <p class="event-title">🚆 JR 오사카역 → 린쿠타운역 이동</p>
+          <p class="event-detail">간사이공항 쾌속 · 약 55~60분</p>
+        </li>
+        <li class="event">
+          <span class="time">20:00</span>
+          <p class="event-title">🏨 체크인</p>
+          <span class="hotel"><a href="https://www.odysissuitesosaka.com/ko/" target="_blank" rel="noopener">Odysis Suites Osaka</a></span>
+          <p class="event-detail">🛍 돈키호테 린쿠점 쇼핑</p>
+        </li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="day" id="day6" open>
+    <summary>
+      <span class="day-badge">DAY 6</span>
+      <h2>10월 13일 (화)</h2>
+      <span class="day-tag">평일</span>
+      <p class="day-route">이즈미사노 / 간사이 → 김포</p>
+    </summary>
+    <div class="day-body">
+      <ul class="timeline">
+        <li class="event">
+          <span class="time">11:00</span>
+          <p class="event-title">🏨 Odysis Suites Osaka 체크아웃</p>
+        </li>
+        <li class="event">
+          <span class="time">-</span>
+          <p class="event-title">🚶 린쿠 구경</p>
+          <details class="spots-toggle">
+
+            <summary class="spots-summary">추천 관광지 <span class="spots-count">(2곳)</span></summary>
+
+            <ul class="spots">
+            <li><strong><a href="https://ikidane-nippon.com/ko/spots/rinku-town" target="_blank" rel="noopener">린쿠타운</a></strong><span class="hours">상시 개방 (상업시설별 상이)</span><span class="desc">간사이국제공항 맞은편의 복합 쇼핑·산책 지구</span></li>
+            <li><strong><a href="https://namu.wiki/w/%EB%8F%88%ED%82%A4%ED%98%B8%ED%85%8C(%ED%95%A0%EC%9D%B8%EC%9E%A1%ED%99%94%EC%A0%90)" target="_blank" rel="noopener">돈키호테 린쿠점</a></strong><span class="hours">(09:00~익일 01:00)</span><span class="desc">공항 근처 쇼핑에 편리한 대형 할인점</span><span class="note">연중무휴</span></li>
+          </ul>
+
+          </details>
+        </li>
+        <li class="event">
+          <span class="time">14:00</span>
+          <p class="event-title">🚕 간사이공항 이동</p>
+        </li>
+        <li class="event">
+          <span class="time">16:05</span>
+          <p class="event-title">✈️ 간사이공항 비행기 출발</p>
+        </li>
+        <li class="event">
+          <span class="time">18:00</span>
+          <p class="event-title">🛬 김포공항 도착</p>
+        </li>
+      </ul>
+    </div>
+  </details>
+
+</div>
+
+<footer>
+  고베-오사카 5박 6일 일정 · 작성 2026<br>
+  관광지·영업시간 정보는 방문 전 공식 사이트에서 다시 한번 확인해 주세요.
+</footer>
+
+<script>
+(function(){
+  var root = document.documentElement;
+  var min = 0.8, max = 1.5, step = 0.1;
+  var saved = parseFloat(localStorage.getItem('trip-font-scale'));
+  var scale = (!isNaN(saved) && saved >= min && saved <= max) ? saved : 1;
+
+  var display = document.getElementById('fontReset');
+
+  function apply(){
+    root.style.setProperty('--scale', scale.toFixed(2));
+    display.textContent = Math.round(scale * 100) + '%';
+    localStorage.setItem('trip-font-scale', scale);
+  }
+
+  document.getElementById('fontUp').addEventListener('click', function(){
+    scale = Math.min(max, +(scale + step).toFixed(2));
+    apply();
+  });
+  document.getElementById('fontDown').addEventListener('click', function(){
+    scale = Math.max(min, +(scale - step).toFixed(2));
+    apply();
+  });
+  display.addEventListener('click', function(){
+    scale = 1;
+    apply();
+  });
+
+  apply();
+
+  document.querySelectorAll('.daynav button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var target = document.getElementById(btn.dataset.target);
+      if(!target) return;
+      target.open = true;
+      target.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
